@@ -4,10 +4,10 @@
 - [x] Context docs
 - [x] Choose theme (Warm paper)
 - [x] Scaffold Next.js app with theme + landing page
-- [ ] Local Postgres + Drizzle schema + migrations
-- [ ] Sign up / log in / log out
-- [ ] Add job form + simple list
-- [ ] Git repo + first commit
+- [x] Local Postgres + Drizzle schema + migrations
+- [x] Sign up / log in / log out
+- [x] Add job form + simple list
+- [x] Git repo + first commit
 
 ## Week 2: Core product
 - [ ] Kanban board with drag and drop
