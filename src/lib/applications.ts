@@ -52,9 +52,10 @@ export type ApplicationInput = {
   notes?: string;
 };
 
-export async function createApplication(userId: string, input: ApplicationInput) {
+/** Creates an application with its first history entry. Returns the new id. */
+export async function createApplication(userId: string, input: ApplicationInput): Promise<string> {
   const now = new Date();
-  await db.transaction(async (tx) => {
+  return db.transaction(async (tx) => {
     const [row] = await tx
       .insert(application)
       .values({
@@ -68,7 +69,19 @@ export async function createApplication(userId: string, input: ApplicationInput)
     await tx
       .insert(statusChange)
       .values({ applicationId: row.id, fromStatus: null, toStatus: input.status, changedAt: now });
+    return row.id;
   });
+}
+
+/** The user's most recent application saved with exactly this link, or null. Used by the extension. */
+export async function findApplicationByUrl(userId: string, url: string) {
+  const [row] = await db
+    .select({ id: application.id, company: application.company, title: application.title, status: application.status })
+    .from(application)
+    .where(and(eq(application.userId, userId), eq(application.url, url)))
+    .orderBy(desc(application.createdAt))
+    .limit(1);
+  return row ?? null;
 }
 
 /**

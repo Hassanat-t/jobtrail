@@ -16,10 +16,11 @@
 - [x] Delete job
 
 ## Week 3: Chrome extension
-- [ ] API token creation in settings
-- [ ] REST endpoints for the extension
-- [ ] Extension popup: read page, pre-fill, save
-- [ ] LinkedIn and Indeed page parsing, with fallback to page title + URL
+- [x] API token creation in settings
+- [x] REST endpoints for the extension
+- [x] Extension popup: read page, pre-fill, save
+- [x] LinkedIn and Indeed page parsing, with fallback to job data on the page, then page title + URL
+- [ ] Try the parser on real LinkedIn and Indeed pages (tests use hand-written sample pages)
 
 ## Week 4: Reminders, stats, launch
 - [ ] Daily reminder cron + Resend email

@@ -12,7 +12,7 @@
 | Charts | Recharts | Simple React charts for the stats page |
 | Email | Resend | Free tier, simple API |
 | Scheduled jobs | Vercel Cron | Calls an API route once a day |
-| Extension | Chrome Manifest V3, Vite + React | Separate folder in the same repo |
+| Extension | Chrome Manifest V3, plain JavaScript (no build step) | Separate `extension/` folder; load it unpacked in Chrome |
 | Tests | Vitest (unit), Playwright (end-to-end) | Fast, standard |
 | CI | GitHub Actions | Lint, type-check, test on every push |
 | Hosting | Vercel (app) + Neon (Postgres) | Both free to start |

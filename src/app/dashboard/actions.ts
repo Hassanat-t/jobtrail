@@ -2,7 +2,6 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import {
   createApplication,
   deleteApplication,
@@ -10,34 +9,9 @@ import {
   updateApplication,
 } from "@/lib/applications";
 import { requireUser } from "@/lib/auth";
-import { SOURCES } from "@/lib/sources";
-import { STATUSES } from "@/lib/status";
+import { idSchema, jobSchema, statusSchema } from "@/lib/job-schema";
 
 export type JobFormState = { error?: string; ok?: boolean };
-
-const optional = z
-  .string()
-  .trim()
-  .optional()
-  .transform((v) => v || undefined);
-
-const statusSchema = z.enum(STATUSES.map((s) => s.id));
-
-const jobSchema = z.object({
-  company: z.string().trim().min(1, "Enter the company name"),
-  title: z.string().trim().min(1, "Enter the job title"),
-  url: z
-    .union([z.literal(""), z.url("Enter a full link, starting with https://")])
-    .optional()
-    .transform((v) => v || undefined),
-  source: z.enum(SOURCES.map((s) => s.id)),
-  location: optional,
-  salary: optional,
-  status: statusSchema,
-  notes: optional,
-});
-
-const idSchema = z.uuid();
 
 export async function addJob(_prev: JobFormState, formData: FormData): Promise<JobFormState> {
   const user = await requireUser();

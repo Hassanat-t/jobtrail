@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JobTrail</title>
+    <link rel="stylesheet" href="popup.css" />
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body>
+    <header>
+      <span class="logo">JobTrail</span>
+      <button type="button" id="disconnect" class="link" hidden>Disconnect</button>
+    </header>
+
+    <!-- One-time setup: connect the extension with a token from Settings -->
+    <section id="setup" hidden>
+      <h1>Connect to JobTrail</h1>
+      <p class="muted">
+        In JobTrail, open <strong>Settings</strong>, create a token and paste it here.
+      </p>
+      <form id="setup-form">
+        <label>
+          <span>JobTrail address</span>
+          <input name="appUrl" type="url" required value="http://localhost:3020" />
+        </label>
+        <label>
+          <span>API token</span>
+          <input name="token" required placeholder="jt_…" autocomplete="off" spellcheck="false" />
+        </label>
+        <p class="error" role="alert" hidden></p>
+        <button type="submit" class="primary">Connect</button>
+      </form>
+    </section>
+
+    <!-- Save the job on the current page -->
+    <section id="save" hidden>
+      <p id="signed-in" class="muted small"></p>
+      <p id="already" class="notice" hidden></p>
+      <form id="save-form">
+        <label>
+          <span>Company</span>
+          <input name="company" required maxlength="200" />
+        </label>
+        <label>
+          <span>Job title</span>
+          <input name="title" required maxlength="200" />
+        </label>
+        <label>
+          <span>Link</span>
+          <input name="url" type="url" />
+        </label>
+        <div class="row">
+          <label>
+            <span>Location</span>
+            <input name="location" maxlength="200" />
+          </label>
+          <label>
+            <span>Salary</span>
+            <input name="salary" maxlength="200" />
+          </label>
+        </div>
+        <div class="row">
+          <label>
+            <span>Found on</span>
+            <select name="source">
+              <option value="linkedin">LinkedIn</option>
+              <option value="indeed">Indeed</option>
+              <option value="referral">Referral</option>
+              <option value="company_site">Company site</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>
+            <span>Status</span>
+            <select name="status">
+              <option value="saved">Saved</option>
+              <option value="applied">Applied</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Notes</span>
+          <textarea name="notes" rows="2" maxlength="2000" placeholder="Optional"></textarea>
+        </label>
+        <p class="error" role="alert" hidden></p>
+        <button type="submit" class="primary">Save to JobTrail</button>
+      </form>
+    </section>
+
+    <!-- After saving -->
+    <section id="done" hidden>
+      <div class="done">
+        <span class="tick" aria-hidden="true">✓</span>
+        <h1>Saved to JobTrail</h1>
+        <p id="done-text" class="muted"></p>
+        <button type="button" id="open-job" class="primary">Open in JobTrail</button>
+      </div>
+    </section>
+
+    <p id="status" class="muted center" role="status">Loading…</p>
+  </body>
+</html>

@@ -18,6 +18,12 @@ pnpm db:migrate           # in a second terminal
 pnpm dev                  # http://localhost:3020
 ```
 
+## Chrome extension
+1. Run the app, log in, open **Settings** and create a token.
+2. In Chrome, go to `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and pick the `extension/` folder.
+3. Click the JobTrail icon, paste the token (the address is `http://localhost:3020` locally) and connect.
+4. On any job page, click the icon, check the details and **Save to JobTrail**.
+
 ## Scripts
 | Command | What it does |
 |---|---|
@@ -26,6 +32,8 @@ pnpm dev                  # http://localhost:3020
 | `pnpm db:generate` | Create a migration after changing `src/db/schema.ts` |
 | `pnpm db:migrate` | Apply migrations |
 | `pnpm db:studio` | Browse the database |
+| `pnpm test` | Unit tests (Vitest), e.g. the extension's page parser |
+| `pnpm icons` | Redraw the extension icons |
 | `pnpm typecheck` / `pnpm lint` | Checks |
 
 ## Project docs

@@ -26,6 +26,9 @@ async function UserMenu() {
   return (
     <div className="flex items-center gap-3 text-sm">
       <span className="hidden text-muted sm:inline">{user.name}</span>
+      <Link href="/dashboard/settings" className="rounded-full px-3 py-1.5 hover:bg-surface-muted">
+        Settings
+      </Link>
       <form action={logOut}>
         <button type="submit" className="rounded-full border px-3 py-1.5 hover:bg-surface-muted">
           Log out

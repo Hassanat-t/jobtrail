@@ -2,6 +2,17 @@
 
 Newest at the top. Format: date, decision, why.
 
+### 2026-11-07: Chrome extension is plain JavaScript, no build step
+`extension/` holds `manifest.json`, `popup.html/css/js` and `parse.js`. Load it with Chrome → Extensions → Load unpacked.
+**Why:** the popup is one small form. Vite + React (the original plan) would add a build step and a bundle for no real gain, and plain files can be loaded straight into Chrome. The page parser is still unit-tested with Vitest.
+
+### 2026-11-07: Page parser tries site selectors, then schema.org JobPosting, then the page title
+**Why:** LinkedIn and Indeed change their markup often. Most career sites (and many boards) include JobPosting data, and the page title nearly always has the role and company, so there's always something to pre-fill. Links are saved in one clean form (e.g. `linkedin.com/jobs/view/<id>/`) so "already saved" checks work.
+
+### 2026-11-07: API tokens are random and stored as SHA-256 hashes
+Shown once when created; revoking deletes the row.
+**Why:** tokens are 24 random bytes, so a fast hash is enough (no need for bcrypt), and a database leak doesn't expose usable tokens.
+
 ### 2026-11-04: Local Postgres is created as UTF-8
 `scripts/db.mjs` passes `--encoding=UTF8` to initdb.
 **Why:** on Windows the default was WIN1252, which crashed when saving "₦". Neon is UTF-8 already, so local now matches production. If you have an old `.pgdata` folder, delete it and run `pnpm db:start` + `pnpm db:migrate` again.
