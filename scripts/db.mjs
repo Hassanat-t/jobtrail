@@ -12,6 +12,8 @@ const pg = new EmbeddedPostgres({
   password: "jobtrail",
   port: 5434,
   persistent: true,
+  // Without this, Windows creates the cluster as WIN1252, which can't store characters like ₦.
+  initdbFlags: ["--encoding=UTF8", "--locale=C"],
 });
 
 if (fresh) await pg.initialise();

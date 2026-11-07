@@ -1,14 +1,13 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Field, FormError, Input, PrimaryButton, inputClass } from "@/components/ui";
-import { SOURCES } from "@/lib/sources";
-import { STATUSES } from "@/lib/status";
-import { addJob, type AddJobState } from "./actions";
+import { FormError, PrimaryButton } from "@/components/ui";
+import { addJob, type JobFormState } from "./actions";
+import { JobFields } from "./job-fields";
 
 export function AddJobForm() {
   const [open, setOpen] = useState(false);
-  const [state, action, pending] = useActionState<AddJobState, FormData>(async (prev, formData) => {
+  const [state, action, pending] = useActionState<JobFormState, FormData>(async (prev, formData) => {
     const result = await addJob(prev, formData);
     // Closing unmounts the form, so it opens empty next time.
     if (result.ok) setOpen(false);
@@ -28,41 +27,7 @@ export function AddJobForm() {
         </button>
       </div>
       <FormError message={state.error} />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Company">
-          <Input name="company" placeholder="Paystack" required autoFocus />
-        </Field>
-        <Field label="Job title">
-          <Input name="title" placeholder="Frontend developer" required />
-        </Field>
-        <Field label="Link to the job post">
-          <Input name="url" type="url" placeholder="https://…" />
-        </Field>
-        <Field label="Location">
-          <Input name="location" placeholder="Lagos, or Remote" />
-        </Field>
-        <Field label="Where did you find it?">
-          <select name="source" defaultValue="linkedin" className={inputClass}>
-            {SOURCES.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Status">
-          <select name="status" defaultValue="saved" className={inputClass}>
-            {STATUSES.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-      </div>
-      <Field label="Notes">
-        <textarea name="notes" rows={3} placeholder="Recruiter's name, salary range, anything to remember" className={inputClass} />
-      </Field>
+      <JobFields autoFocus />
       <PrimaryButton type="submit" disabled={pending}>
         {pending ? "Saving…" : "Save job"}
       </PrimaryButton>

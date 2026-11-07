@@ -1,5 +1,5 @@
 import "server-only";
-import { desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { application, statusChange } from "@/db/schema";
 import type { Source } from "./sources";
@@ -7,6 +7,11 @@ import type { Status } from "./status";
 
 // Data access for applications. Every function takes the user id from requireUser(),
 // never from the client, so users only ever touch their own rows.
+
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
+const ownedBy = (userId: string, id: string) =>
+  and(eq(application.id, id), eq(application.userId, userId));
 
 export function listApplications(userId: string) {
   return db
@@ -16,17 +21,38 @@ export function listApplications(userId: string) {
     .orderBy(desc(application.statusChangedAt));
 }
 
-export type NewApplication = {
+export async function getApplication(userId: string, id: string) {
+  const [row] = await db.select().from(application).where(ownedBy(userId, id));
+  return row ?? null;
+}
+
+/** Status history for one application, oldest first. Returns [] if it isn't the user's. */
+export async function getStatusHistory(userId: string, id: string) {
+  return db
+    .select({
+      id: statusChange.id,
+      fromStatus: statusChange.fromStatus,
+      toStatus: statusChange.toStatus,
+      changedAt: statusChange.changedAt,
+    })
+    .from(statusChange)
+    .innerJoin(application, eq(statusChange.applicationId, application.id))
+    .where(ownedBy(userId, id))
+    .orderBy(asc(statusChange.changedAt));
+}
+
+export type ApplicationInput = {
   company: string;
   title: string;
   url?: string;
   source: Source;
   location?: string;
+  salary?: string;
   status: Status;
   notes?: string;
 };
 
-export async function createApplication(userId: string, input: NewApplication) {
+export async function createApplication(userId: string, input: ApplicationInput) {
   const now = new Date();
   await db.transaction(async (tx) => {
     const [row] = await tx
@@ -43,4 +69,60 @@ export async function createApplication(userId: string, input: NewApplication) {
       .insert(statusChange)
       .values({ applicationId: row.id, fromStatus: null, toStatus: input.status, changedAt: now });
   });
+}
+
+/**
+ * Moves an application to a new status and logs the change.
+ * Clears reminderSentAt so a fresh reminder can go out for the new stage.
+ */
+async function changeStatus(tx: Tx, userId: string, id: string, to: Status) {
+  const [current] = await tx
+    .select({ status: application.status, appliedAt: application.appliedAt })
+    .from(application)
+    .where(ownedBy(userId, id))
+    .for("update");
+  if (!current) return false;
+  if (current.status === to) return true;
+
+  const now = new Date();
+  await tx
+    .update(application)
+    .set({
+      status: to,
+      statusChangedAt: now,
+      reminderSentAt: null,
+      appliedAt: current.appliedAt ?? (to === "saved" ? null : now),
+    })
+    .where(ownedBy(userId, id));
+  await tx
+    .insert(statusChange)
+    .values({ applicationId: id, fromStatus: current.status, toStatus: to, changedAt: now });
+  return true;
+}
+
+export async function moveApplication(userId: string, id: string, to: Status) {
+  return db.transaction((tx) => changeStatus(tx, userId, id, to));
+}
+
+export async function updateApplication(userId: string, id: string, input: ApplicationInput) {
+  const { status, ...fields } = input;
+  return db.transaction(async (tx) => {
+    const found = await changeStatus(tx, userId, id, status);
+    if (!found) return false;
+    await tx
+      .update(application)
+      .set({
+        ...fields,
+        url: fields.url ?? null,
+        location: fields.location ?? null,
+        salary: fields.salary ?? null,
+        notes: fields.notes ?? null,
+      })
+      .where(ownedBy(userId, id));
+    return true;
+  });
+}
+
+export async function deleteApplication(userId: string, id: string) {
+  await db.delete(application).where(ownedBy(userId, id));
 }

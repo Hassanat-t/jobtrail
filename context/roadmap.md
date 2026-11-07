@@ -10,10 +10,10 @@
 - [x] Git repo + first commit
 
 ## Week 2: Core product
-- [ ] Kanban board with drag and drop
-- [ ] Status history recorded on every change
-- [ ] Job detail page (edit, notes, timeline)
-- [ ] Delete job
+- [x] Kanban board with drag and drop (mouse, touch and keyboard)
+- [x] Status history recorded on every change
+- [x] Job detail page (edit, notes, timeline)
+- [x] Delete job
 
 ## Week 3: Chrome extension
 - [ ] API token creation in settings
