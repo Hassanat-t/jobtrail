@@ -1,5 +1,7 @@
 # JobTrail
 
+[![CI](https://github.com/Hassanat-t/jobtrail/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassanat-t/jobtrail/actions/workflows/ci.yml)
+
 Track every job application, from saved to signed. Save jobs in one click, move them through each stage, and get reminded to follow up.
 
 > Work in progress. See [context/roadmap.md](context/roadmap.md) for what's built and what's next.

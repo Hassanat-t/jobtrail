@@ -26,7 +26,7 @@
 - [x] Daily reminder cron + Resend email (on/off switch in Settings)
 - [x] Stats page with charts
 - [x] Tests (Vitest + Playwright) and GitHub Actions CI
-- [ ] Push to GitHub and check CI goes green
+- [x] Push to GitHub (github.com/Hassanat-t/jobtrail) and check CI goes green
 - [ ] Deploy to Vercel + Neon (needs your accounts: Vercel, Neon, Resend)
 - [ ] README with screenshots and demo GIF
 
