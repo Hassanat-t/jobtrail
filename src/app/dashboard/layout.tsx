@@ -7,8 +7,8 @@ export default function DashboardLayout({ children }: LayoutProps<"/dashboard">)
   return (
     <div className="flex flex-1 flex-col">
       <header className="border-b bg-surface">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link href="/dashboard" className="font-serif text-2xl font-medium tracking-tight">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:px-6">
+          <Link href="/dashboard" className="font-serif text-xl font-medium tracking-tight sm:text-2xl">
             JobTrail
           </Link>
           <Suspense fallback={<span className="h-5 w-32 animate-pulse rounded bg-surface-muted" />}>
@@ -24,13 +24,16 @@ export default function DashboardLayout({ children }: LayoutProps<"/dashboard">)
 async function UserMenu() {
   const user = await requireUser();
   return (
-    <div className="flex items-center gap-3 text-sm">
-      <span className="hidden text-muted sm:inline">{user.name}</span>
-      <Link href="/dashboard/settings" className="rounded-full px-3 py-1.5 hover:bg-surface-muted">
+    <div className="flex items-center gap-1 text-sm sm:gap-2">
+      <span className="mr-2 hidden text-muted md:inline">{user.name}</span>
+      <Link href="/dashboard/stats" className="rounded-full px-2 py-1.5 hover:bg-surface-muted sm:px-3">
+        Stats
+      </Link>
+      <Link href="/dashboard/settings" className="rounded-full px-2 py-1.5 hover:bg-surface-muted sm:px-3">
         Settings
       </Link>
       <form action={logOut}>
-        <button type="submit" className="rounded-full border px-3 py-1.5 hover:bg-surface-muted">
+        <button type="submit" className="rounded-full border px-2.5 py-1.5 whitespace-nowrap hover:bg-surface-muted sm:px-3">
           Log out
         </button>
       </form>

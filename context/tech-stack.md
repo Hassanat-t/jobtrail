@@ -9,8 +9,8 @@
 | ORM | Drizzle | Type-safe, SQL-like, lightweight migrations |
 | Auth | Better Auth (email + password) | Modern, works with Drizzle, no third-party account needed |
 | Drag and drop | dnd-kit | Accessible, works with React 19 |
-| Charts | Recharts | Simple React charts for the stats page |
-| Email | Resend | Free tier, simple API |
+| Charts | Hand-built bars (HTML + Tailwind) | Only three simple bar charts, so no chart library needed |
+| Email | Resend (HTTP API, no SDK) | Free tier; without an API key, emails print to the terminal |
 | Scheduled jobs | Vercel Cron | Calls an API route once a day |
 | Extension | Chrome Manifest V3, plain JavaScript (no build step) | Separate `extension/` folder; load it unpacked in Chrome |
 | Tests | Vitest (unit), Playwright (end-to-end) | Fast, standard |
@@ -23,12 +23,14 @@
 - Ports: app on 3020 (3000–3011 are used by other projects), Postgres on 5434 (5433 is used by Ziki).
 - Next.js 16.4 with Tailwind v4. Read `AGENTS.md`: this Next.js version ships its own docs in `node_modules/next/dist/docs/`.
 
-## Repo layout (planned)
+## Repo layout
 ```
 jobtrail/
   context/        project docs (this folder)
   src/            Next.js app
   extension/      Chrome extension
+  e2e/            Playwright end-to-end tests
+  .github/        CI workflow
   scripts/        local dev helpers (e.g. start Postgres)
   drizzle/        database migrations
 ```

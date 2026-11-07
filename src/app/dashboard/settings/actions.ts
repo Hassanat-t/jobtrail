@@ -1,7 +1,10 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { db } from "@/db";
+import { user as userTable } from "@/db/schema";
 import { createApiToken, revokeApiToken } from "@/lib/api-tokens";
 import { requireUser } from "@/lib/auth";
 import { idSchema } from "@/lib/job-schema";
@@ -23,5 +26,14 @@ export async function createToken(_prev: TokenFormState, formData: FormData): Pr
 export async function revokeToken(id: string) {
   const user = await requireUser();
   if (idSchema.safeParse(id).success) await revokeApiToken(user.id, id);
+  refresh();
+}
+
+export async function setReminders(enabled: boolean) {
+  const user = await requireUser();
+  await db
+    .update(userTable)
+    .set({ remindersEnabled: enabled === true, updatedAt: new Date() })
+    .where(eq(userTable.id, user.id));
   refresh();
 }

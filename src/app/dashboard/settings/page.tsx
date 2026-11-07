@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { eq } from "drizzle-orm";
 import { Suspense } from "react";
+import { db } from "@/db";
+import { user as userTable } from "@/db/schema";
 import { listApiTokens } from "@/lib/api-tokens";
 import { requireUser } from "@/lib/auth";
 import { revokeToken } from "./actions";
+import { RemindersSwitch } from "./reminders-switch";
 import { CreateTokenForm } from "./token-form";
 
 export const metadata: Metadata = { title: "Settings · JobTrail" };
@@ -15,6 +19,13 @@ export default function SettingsPage() {
       <div>
         <h1 className="text-3xl">Settings</h1>
       </div>
+
+      <section className="rounded-card border bg-surface p-5 sm:p-6">
+        <h2 className="mb-4 text-xl">Email</h2>
+        <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
+          <Reminders />
+        </Suspense>
+      </section>
 
       <section className="space-y-5 rounded-card border bg-surface p-5 sm:p-6">
         <div>
@@ -31,6 +42,15 @@ export default function SettingsPage() {
       </section>
     </div>
   );
+}
+
+async function Reminders() {
+  const user = await requireUser();
+  const [row] = await db
+    .select({ remindersEnabled: userTable.remindersEnabled })
+    .from(userTable)
+    .where(eq(userTable.id, user.id));
+  return <RemindersSwitch enabled={row?.remindersEnabled ?? true} />;
 }
 
 async function TokenList() {

@@ -23,10 +23,11 @@
 - [ ] Try the parser on real LinkedIn and Indeed pages (tests use hand-written sample pages)
 
 ## Week 4: Reminders, stats, launch
-- [ ] Daily reminder cron + Resend email
-- [ ] Stats page with charts
-- [ ] Tests (Vitest + Playwright) and GitHub Actions CI
-- [ ] Deploy to Vercel + Neon
+- [x] Daily reminder cron + Resend email (on/off switch in Settings)
+- [x] Stats page with charts
+- [x] Tests (Vitest + Playwright) and GitHub Actions CI
+- [ ] Push to GitHub and check CI goes green
+- [ ] Deploy to Vercel + Neon (needs your accounts: Vercel, Neon, Resend)
 - [ ] README with screenshots and demo GIF
 
 ## Later (maybe)

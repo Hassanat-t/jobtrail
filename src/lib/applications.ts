@@ -139,3 +139,19 @@ export async function updateApplication(userId: string, id: string, input: Appli
 export async function deleteApplication(userId: string, id: string) {
   await db.delete(application).where(ownedBy(userId, id));
 }
+
+/** Everything the stats page needs, for one user. */
+export async function getStatsData(userId: string) {
+  const [applications, changes] = await Promise.all([
+    db
+      .select({ id: application.id, source: application.source, status: application.status, appliedAt: application.appliedAt })
+      .from(application)
+      .where(eq(application.userId, userId)),
+    db
+      .select({ applicationId: statusChange.applicationId, toStatus: statusChange.toStatus, changedAt: statusChange.changedAt })
+      .from(statusChange)
+      .innerJoin(application, eq(statusChange.applicationId, application.id))
+      .where(eq(application.userId, userId)),
+  ]);
+  return { applications, changes };
+}
