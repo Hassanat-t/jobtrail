@@ -2,6 +2,10 @@
 
 Newest at the top. Format: date, decision, why.
 
+### 2026-11-24: Database migrations run on every Vercel deploy
+`vercel.json` sets the build command to `pnpm vercel-build` (`drizzle-kit migrate && next build`).
+**Why:** the hosted database can never fall behind the code, and there's no manual step to forget. If a migration fails, the deploy fails and the old version stays live.
+
 ### 2026-11-07: Stats charts are hand-built, and status colours never work alone
 The three charts are simple bars made with HTML and Tailwind, not Recharts. Every bar has its label and number next to it, and the weekly chart has a hidden table for screen readers.
 **Why:** a chart library would add weight for three bar charts. The status colours failed a colour-blind check as a chart palette (Saved/Applied and Offer/Rejected are too close), so charts never rely on colour alone: the colour just matches the board.

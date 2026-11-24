@@ -27,6 +27,7 @@
 - [x] Stats page with charts
 - [x] Tests (Vitest + Playwright) and GitHub Actions CI
 - [x] Push to GitHub (github.com/Hassanat-t/jobtrail) and check CI goes green
+- [x] Deploy setup: migrations run on every deploy, steps in README
 - [ ] Deploy to Vercel + Neon (needs your accounts: Vercel, Neon, Resend)
 - [ ] README with screenshots and demo GIF
 

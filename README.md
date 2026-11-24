@@ -33,6 +33,16 @@ Once a day Vercel Cron calls `/api/cron/reminders` (see `vercel.json`). It email
 curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3020/api/cron/reminders
 ```
 
+## Deploy (Vercel + Neon + Resend)
+All three have free tiers.
+
+1. **Neon:** create a project and copy the **pooled** connection string.
+2. **Resend:** create an API key. Until you verify a domain, Resend only delivers to your own sign-up email, from `onboarding@resend.dev`.
+3. **Vercel:** import this GitHub repo. Add the environment variables `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `CRON_SECRET`, `RESEND_API_KEY` and `EMAIL_FROM` (see `.env.example`), then deploy.
+4. Set `BETTER_AUTH_URL` to the address Vercel gives you and redeploy.
+
+Each deploy runs `pnpm vercel-build`, which applies database migrations and then builds. The daily reminder job is set up by `vercel.json`.
+
 ## Scripts
 | Command | What it does |
 |---|---|
